@@ -1,0 +1,11 @@
+div.container.mt-5
+  .row.justify-content-center
+    .col-md-6
+      .card.shadow
+        .card-header.bg-warning.text-dark.d-flex.align-items-center
+          i.fas.fa-edit.me-2
+          h2.mb-0.flex-grow-1 Edit Category
+        .card-body
+          = render 'form'
+          .mt-3.d-flex.justify-content-between
+            = link_to t('back', default: 'Back'), category_index_path, class: 'btn btn-secondary' 
