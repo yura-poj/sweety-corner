@@ -15,8 +15,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_23_160357) do
   enable_extension "pg_catalog.plpgsql"
 
   create_table "cart_items", force: :cascade do |t|
-    t.integer "quantity"
-    t.bigint "product_id"
+    t.integer "quantity", null: false
+    t.bigint "product_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "cart_id", null: false
@@ -25,25 +25,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_23_160357) do
   end
 
   create_table "carts", force: :cascade do |t|
-    t.bigint "user_id"
-    t.decimal "total_price"
-    t.decimal "discount"
+    t.bigint "user_id", null: false
+    t.decimal "total_price", null: false
+    t.decimal "discount", default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_carts_on_user_id"
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "products", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.text "description"
-    t.decimal "price"
-    t.integer "available_quantity"
+    t.decimal "price", null: false
+    t.decimal "discount", default: "0.0", null: false
+    t.integer "available_quantity", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "category_id", null: false
@@ -63,5 +64,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_23_160357) do
   end
 
   add_foreign_key "cart_items", "carts"
+  add_foreign_key "cart_items", "products"
+  add_foreign_key "carts", "users"
   add_foreign_key "products", "categories"
 end
