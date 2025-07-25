@@ -1,0 +1,22 @@
+div.container.mt-5
+  .row.justify-content-center
+    .col-lg-10
+      .card.shadow
+        .card-header.bg-primary.text-white.d-flex.align-items-center
+          i.fas.fa-list-ul.me-2
+          h2.mb-0.flex-grow-1 Category List
+          = link_to 'New Category', new_category_path, class: 'btn btn-success btn-lg'
+        .card-body.p-0
+          table.table.table-hover.mb-0
+            thead
+              tr
+                th Title
+                th.text-end Actions
+            tbody
+              - @categories.each do |category|
+                tr
+                  td.align-middle = category.title
+                  td.text-end
+                    = link_to 'Show', category_path(category), class: 'btn btn-outline-primary btn-sm me-1'
+                    = link_to 'Edit', edit_category_path(category), class: 'btn btn-outline-secondary btn-sm me-1'
+                    = link_to 'Delete', category_path(category), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' 
