@@ -1,9 +1,15 @@
-h1.mb-4 Category List
-.table.table-striped
-  thead
-    tr
-      th Title
-      th Actions
-  tbody
-    = render @categories
-= link_to 'New Category', new_category_path, class: 'btn btn-success mt-3'
+.container
+  h1.mb-4.text-center.text-primary Category List
+
+  .card.shadow-sm
+    .card-body.p-0
+      table.table.table-striped.mb-0
+        thead.table-light
+          tr
+            th.ps-3 Title
+            th.text-end pe-3 Actions
+        tbody
+          = render @categories
+
+  .d-flex.justify-content-end.mt-3
+    = link_to 'New Category', new_category_path, class: 'btn btn-success'
