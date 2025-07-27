@@ -14,21 +14,28 @@ class CategoriesController < ApplicationController
   def create
     @category = Category.new(category_params)
     if @category.save
-      redirect_to category_index_path, notice: "Category created!"
+      redirect_to categories_path, notice: "Category created!"
     else
-      redirect_to category_path(create), alert: "Category not created!"
+      redirect_to new_category_path, alert: "Category not created!"
     end
   end
 
   def edit
+    @category = Category.find(params[:id])
   end
 
   def update
+    @category = Category.find(params[:id])
+    if @category.update(category_params)
+      redirect_to categories_path, notice: "Category updated!"
+    else
+      redirect_to edit_category_path(@category), alert: "Category not updated!"
+    end
   end
 
   def destroy
     Category.find(params[:id]).destroy
-    redirect_to category_index_path, notice: "Category deleted!"
+    redirect_to categories_path, notice: "Category deleted!"
   end
 
   def category_params
