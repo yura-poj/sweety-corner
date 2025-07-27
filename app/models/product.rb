@@ -3,5 +3,4 @@ class Product < ApplicationRecord
   has_many :cart_products
 
   validates :name, :discount, :price, :available_quantity, presence: true
-
 end

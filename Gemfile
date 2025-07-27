@@ -5,7 +5,7 @@ gem "rails", "~> 8.0.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use pg as the database for Active Record
-gem 'pg'
+gem "pg"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -42,9 +42,9 @@ gem "thruster", require: false
 
 gem "dotenv-rails"
 
-gem 'devise'
+gem "devise"
 
-gem 'kaminari'
+gem "kaminari"
 
 gem "dartsass-rails"
 
