@@ -1,7 +1,6 @@
 class ProductsController < ApplicationController
-  PRODUCTS_PER_PAGE = 20
   def index
-    @products = Product.page(params[:page]).per(PRODUCTS_PER_PAGE)
+    @pagy, @products = pagy(Product.all)
   end
 
   def show
