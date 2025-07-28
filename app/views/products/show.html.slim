@@ -1,0 +1,26 @@
+.container.mt-4
+  h1.mb-3.text-primary = @product.title
+
+  p.lead = @product.description if @product.respond_to?(:description)
+
+  hr
+
+  p
+    strong Price:
+    = number_to_currency(@product.price) if @product.respond_to?(:price)
+
+  p
+    strong Available quantity:
+    = @product.available_quantity if @product.respond_to?(:available_quantity)
+
+  p
+    strong Discount:
+    - if @product.respond_to?(:discount) && @product.discount.present?
+      = number_to_percentage(@product.discount * 100, precision: 0)
+
+  p
+    strong Category:
+    = link_to @product.category.title, category_path(@product.category) if @product.respond_to?(:category) && @product.category
+
+  = link_to "Edit Product", edit_product_path(@product), class: "btn btn-outline-secondary mt-3 me-2"
+  = link_to "Back to Products", products_path, class: "btn btn-primary mt-3"
