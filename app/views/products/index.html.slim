@@ -1,4 +1,7 @@
 .container
+  .d-flex.justify-content-end.mt-3
+    = link_to 'New Product', new_product_path, class: 'btn btn-success'
+
   h1.mb-4.text-center.text-primary Product List
 
   .card.shadow-sm
@@ -11,6 +14,4 @@
             th.text-end.pe-3 Actions
         tbody
           = render @products
-
-  .d-flex.justify-content-end.mt-3
-    = link_to 'New Product', new_product_path, class: 'btn btn-success'
+  = pagy_nav(@pagy) if @pagy.pages > 1
