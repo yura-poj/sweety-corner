@@ -25,6 +25,7 @@ html
 
   body
     = render "shared/nav"
-    = render "shared/flash"
-    = yield
+    .container.mt-4
+      = render "shared/flash"
+      = yield
     = render "shared/footer"
