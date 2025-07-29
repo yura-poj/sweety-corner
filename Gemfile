@@ -68,6 +68,8 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  gem "faker"
 end
 
 group :test do
@@ -76,4 +78,5 @@ group :test do
   gem "selenium-webdriver"
   gem "rspec-rails"
   gem "factory_bot_rails"
+  gem 'shoulda-matchers'
 end
