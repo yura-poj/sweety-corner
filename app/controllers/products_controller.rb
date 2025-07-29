@@ -36,9 +36,9 @@ class ProductsController < ApplicationController
   def destroy
     @product = Product.find(params[:id])
     if @product.destroy
-      redirect_back(fallback_location: root_path, notice: 'Product was successfully destroyed.')
+      redirect_back(fallback_location: root_path, notice: "Product was successfully destroyed.")
     else
-      redirect_back(fallback_location: root_path, notice: 'Product was not destroyed.')
+      redirect_back(fallback_location: root_path, notice: "Product was not destroyed.")
     end
   end
 
