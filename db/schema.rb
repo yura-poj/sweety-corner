@@ -35,6 +35,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_104722) do
     t.bigint "user_id", null: false
     t.decimal "total_price", precision: 10, scale: 2, null: false
     t.decimal "discount", null: false
+    t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_orders_on_user_id"
