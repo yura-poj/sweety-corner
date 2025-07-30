@@ -1,0 +1,6 @@
+tr
+  td.ps-3 = category.title
+  td.text-end.pe-3
+    = link_to 'Show', category_path(category), class: 'btn btn-sm btn-outline-primary me-2'
+    = link_to 'Edit', edit_category_path(category), class: 'btn btn-sm btn-outline-secondary me-2'
+    = button_to 'Delete', category_path(category), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-outline-danger'

@@ -1,0 +1,22 @@
+= form_with model: @product, local: true do |form|
+  = render 'shared/errors', resource: @product
+  p
+    = form.label :title
+    br = form.text_field :title
+  p
+    = form.label :description
+    br = form.text_area :description, rows: 5
+  p
+    = form.label :category
+    br = form.collection_select :category_id, Category.all, :id, :title, prompt: true
+  p
+    = form.label :price
+    br = form.number_field :price
+  p
+    = form.label :discount
+    br = form.number_field :discount
+  p
+    = form.label :available_quantity
+    br = form.number_field :available_quantity, step: 1
+
+  p = form.submit

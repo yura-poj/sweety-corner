@@ -4,6 +4,20 @@
 #
 # Example:
 #
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+["Candy", "Chocolate", "Snacks", "Drinks"].each do |category_title|
+  Category.find_or_create_by!(title: category_title)
+end
+
+Category.limit(10).each do |category|
+  100.times do
+    Product.find_or_create_by!(
+      title: Faker::Commerce.product_name,
+      description: Faker::Commerce.product_name,
+      price: Faker::Commerce.price,
+      available_quantity: Faker::Number.number(digits: 2),
+      discount: Faker::Number.number(digits: 2),
+      category: category
+    )
+  end
+end
+
