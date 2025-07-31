@@ -4,7 +4,7 @@
 #
 # Example:
 #
-["Candy", "Chocolate", "Snacks", "Drinks"].each do |category_title|
+[ "Candy", "Chocolate", "Snacks", "Drinks" ].each do |category_title|
   Category.find_or_create_by!(title: category_title)
 end
 
@@ -20,4 +20,3 @@ Category.limit(10).each do |category|
     )
   end
 end
-

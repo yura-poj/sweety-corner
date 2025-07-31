@@ -1,7 +1,7 @@
 class Order < ApplicationRecord
   belongs_to :user
   has_many :order_items, dependent: :destroy
-  
+
   validates :total_price, presence: true
 
   aasm(:status, whiny_transitions: false) do
