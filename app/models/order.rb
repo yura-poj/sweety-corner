@@ -70,12 +70,10 @@ class Order < ApplicationRecord
       order_item.proceed
     end
 
-    # Current order is no longer a cart, so we can create a new one
     user.orders.create!(total_price: 0, status: :cart, discount: 0)
   end
 
   def set_cart_limit
-    print(user.orders.where(status: :cart).count)
     if user.orders.where(status: :cart).exists?
       errors.add(:base, 'User already have an active cart.')
       throw(:abort)
