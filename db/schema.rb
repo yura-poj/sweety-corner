@@ -22,6 +22,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_104722) do
 
   create_table "order_items", force: :cascade do |t|
     t.integer "quantity", null: false
+    t.integer "status", default: 0, null: false
     t.decimal "total_price", precision: 8, scale: 2, null: false
     t.bigint "order_id", null: false
     t.bigint "product_id", null: false
