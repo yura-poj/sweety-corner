@@ -42,6 +42,11 @@ class ProductsController < ApplicationController
     end
   end
 
+  def add_to_cart
+    @product = Product.find(params[:id])
+    current_user.cart.add_product(@product)
+  end
+
   def product_params
     params.require(:product).permit(:title, :category_id, :price, :discount, :available_quantity, :description)
   end
