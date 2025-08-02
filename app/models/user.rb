@@ -6,6 +6,6 @@ class User < ApplicationRecord
   has_many :orders, dependent: :destroy
 
   def cart
-    orders.where(status: :cart).first
+    @cart ||= orders.find_by(status: :cart)
   end
 end

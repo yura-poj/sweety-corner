@@ -4,11 +4,11 @@ class Order < ApplicationRecord
   has_many :order_items, dependent: :destroy
 
   validates :total_price, :discount, presence: true
+  validate :must_be_one_cart
 
-  before_create :set_cart_limit
 
   enum :status, [
-    :cart, :waiting_for_payment, :payed, :collecting, :delivering, :delivered,
+    :cart, :waiting_for_payment, :payed, :collecting, :delivering, :completed,
     :received, :canceled ]
 
   aasm(:status, whiny_transitions: false, enum: true) do
@@ -17,7 +17,7 @@ class Order < ApplicationRecord
     state :payed, after_enter: :process
     state :collecting
     state :delivering
-    state :delivered
+    state :completed
     state :received
     state :canceled
 
@@ -46,11 +46,11 @@ class Order < ApplicationRecord
     end
 
     event :deliver do
-      transitions from: :delivering, to: :delivered
+      transitions from: :delivering, to: :completed
     end
 
     event :receive do
-      transitions from: :delivered, to: :received
+      transitions from: :completed, to: :received
     end
   end
 
@@ -73,9 +73,9 @@ class Order < ApplicationRecord
     user.orders.create!(total_price: 0, status: :cart, discount: 0)
   end
 
-  def set_cart_limit
+  def must_be_one_cart
     if user.orders.where(status: :cart).exists?
-      errors.add(:base, 'User already have an active cart.')
+      errors.add(:base, "User already have an active cart.")
       throw(:abort)
     end
   end

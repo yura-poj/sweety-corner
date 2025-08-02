@@ -22,7 +22,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_104722) do
 
   create_table "order_items", force: :cascade do |t|
     t.integer "quantity", null: false
-    t.integer "status", default: 0, null: false
     t.decimal "total_price", precision: 8, scale: 2, null: false
     t.bigint "order_id", null: false
     t.bigint "product_id", null: false
@@ -52,6 +51,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_104722) do
     t.datetime "updated_at", null: false
     t.bigint "category_id", null: false
     t.index ["category_id"], name: "index_products_on_category_id"
+    t.check_constraint "price >= 0::numeric", name: "price_check"
   end
 
   create_table "users", force: :cascade do |t|
