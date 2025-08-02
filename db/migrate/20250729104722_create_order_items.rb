@@ -7,5 +7,7 @@ class CreateOrderItems < ActiveRecord::Migration[8.0]
       t.references :product, null: false, foreign_key: true
       t.timestamps
     end
+
+    add_check_constraint :products, "price >= 0", name: "price_check"
   end
 end
