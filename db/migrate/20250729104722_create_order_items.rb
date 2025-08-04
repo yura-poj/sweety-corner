@@ -8,6 +8,8 @@ class CreateOrderItems < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_check_constraint :products, "price >= 0", name: "price_check"
+    add_check_constraint :order_items, "quantity >= 0", name: "quantity_check"
+    add_check_constraint :order_items, "total_price >= 0", name: "total_price_check"
+    add_check_constraint :orders, "total_price >= 0", name: "total_price_check"
   end
 end
