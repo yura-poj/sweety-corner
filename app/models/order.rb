@@ -54,15 +54,6 @@ class Order < ApplicationRecord
     end
   end
 
-  def add_product(product)
-    position = order_items.where(product: product).first
-    if position
-      position.add
-    else
-      order_items.create(product: product, quantity: 1, total_price: product.price)
-    end
-  end
-
   private
 
   def process
