@@ -29,6 +29,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_104722) do
     t.datetime "updated_at", null: false
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["product_id"], name: "index_order_items_on_product_id"
+    t.check_constraint "quantity >= 0", name: "quantity_check"
+    t.check_constraint "total_price >= 0::numeric", name: "total_price_check"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -39,6 +41,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_104722) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_orders_on_user_id"
+    t.check_constraint "total_price >= 0::numeric", name: "total_price_check"
   end
 
   create_table "products", force: :cascade do |t|
