@@ -44,7 +44,17 @@ class ProductsController < ApplicationController
 
   def add_to_cart
     @product = Product.find(params[:id])
-    current_user.cart.add_product(@product)
+    ProductAdder.new(current_user.cart).call(product: @product)
+  end
+
+  def remove_from_cart
+    @product = Product.find(params[:id])
+    ProductRemover.new(current_user.cart).call(product: @product)
+  end
+
+  def destroy_from_cart
+    @product = Product.find(params[:id])
+
   end
 
   def product_params

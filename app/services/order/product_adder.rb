@@ -1,5 +1,4 @@
-class ProductAdder
-  extend Callable
+class Order::ProductAdder
 
   def initialize(order)
     @order = order
