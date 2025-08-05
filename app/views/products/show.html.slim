@@ -23,4 +23,6 @@
     = link_to @product.category.title, category_path(@product.category) if @product.respond_to?(:category) && @product.category
 
   = link_to "Edit Product", edit_product_path(@product), class: "btn btn-outline-secondary mt-3 me-2"
+  = button_to "Add to cart", add_to_cart_product_path(@product), method: :post, class: "btn btn-outline-secondary mt-3 me-2"
+  = button_to "remove from cart", remove_from_cart_product_path(@product), class: "btn btn-outline-secondary mt-3 me-2", method: :post
   = link_to "Back to Products", products_path, class: "btn btn-primary mt-3"

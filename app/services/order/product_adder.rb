@@ -12,7 +12,7 @@ class Order::ProductAdder
   private
 
   def add_product
-    @position = @order.order_items.find_by(product: @product)
+    @position = @order.order_items.find_by(product_id: @product)
 
     @position ? @position.add : @order.order_items.create!(
                                   product: @product,

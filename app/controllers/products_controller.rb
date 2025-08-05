@@ -1,4 +1,6 @@
 class ProductsController < ApplicationController
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :add_to_cart,
+                                     :remove_from_cart, :add_to_cart, :destroy_from_cart ]
   def index
     @pagy, @products = pagy(Product.all)
   end
@@ -20,12 +22,9 @@ class ProductsController < ApplicationController
     end
   end
 
-  def edit
-    @product = Product.find(params[:id])
-  end
+  def edit; end
 
   def update
-    @product = Product.find(params[:id])
     if @product.update(product_params)
       redirect_to @product
     else
@@ -34,7 +33,6 @@ class ProductsController < ApplicationController
   end
 
   def destroy
-    @product = Product.find(params[:id])
     if @product.destroy
       redirect_back(fallback_location: root_path, notice: "Product was successfully destroyed.")
     else
@@ -43,21 +41,22 @@ class ProductsController < ApplicationController
   end
 
   def add_to_cart
-    @product = Product.find(params[:id])
-    ProductAdder.new(current_user.cart).call(product: @product)
+    Order::ProductAdder.new(current_user.cart).call(@product)
   end
 
   def remove_from_cart
-    @product = Product.find(params[:id])
-    ProductRemover.new(current_user.cart).call(product: @product)
+    Order::ProductRemover.new(current_user.cart).call(@product)
   end
 
   def destroy_from_cart
-    @product = Product.find(params[:id])
-
+    Order::ProductDestroyer.new(current_user.cart).call(@product)
   end
 
   def product_params
     params.require(:product).permit(:title, :category_id, :price, :discount, :available_quantity, :description)
+  end
+
+  def set_product
+    @product = Product.find(params[:id])
   end
 end
