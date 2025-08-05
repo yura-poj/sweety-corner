@@ -3,16 +3,13 @@ class OrderItem < ApplicationRecord
   belongs_to :product
 
   validates :quantity, :total_price, presence: true
+  validates :product_id, uniqueness: { scope: :order_id }
 
   def add
     increment!(:quantity)
   end
 
   def remove
-    if quantity <= 1
-      destroy!
-    else
-      decrement!(:quantity)
-    end
+    decrement!(:quantity)
   end
 end

@@ -6,6 +6,6 @@ class User < ApplicationRecord
   has_many :orders, dependent: :destroy
 
   def cart
-    @cart ||= orders.find_by(status: :cart)
+    @cart ||= orders.find_or_create_by(status: :cart)
   end
 end
