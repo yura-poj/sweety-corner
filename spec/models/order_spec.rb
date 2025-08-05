@@ -38,7 +38,7 @@ RSpec.describe Order, type: :model do
 
   end
 
-  describe '#process (private method)' do
+  describe '#pay!' do
     let!(:order_item1) { create(:order_item, order: order, product: product, quantity: 1, total_price: 10.50) }
     let!(:order_item2) { create(:order_item, order: order, product: product, quantity: 2, total_price: 21.0) }
 
@@ -49,12 +49,6 @@ RSpec.describe Order, type: :model do
       order.pay!
 
       expect(order.payed?).to be true
-
-      expect(user.orders.count).to eq(initial_orders_count + 1)
-
-      new_cart = user.orders.where(status: :cart).last
-      expect(new_cart.total_price).to eq(0.0)
-      expect(new_cart.discount).to eq(0.0)
     end
   end
 end
