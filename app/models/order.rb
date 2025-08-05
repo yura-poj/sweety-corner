@@ -14,7 +14,7 @@ class Order < ApplicationRecord
   aasm(:status, whiny_transitions: false, enum: true) do
     state :cart, initial: true
     state :waiting_for_payment
-    state :payed, after_enter: :process
+    state :payed
     state :collecting
     state :delivering
     state :completed
@@ -55,10 +55,6 @@ class Order < ApplicationRecord
   end
 
   private
-
-  def process
-    user.orders.create!(total_price: 0, status: :cart, discount: 0)
-  end
 
   def must_be_one_cart
     return if user.blank?
