@@ -35,7 +35,6 @@ RSpec.describe Order, type: :model do
   end
 
   describe '#add_product' do
-
   end
 
   describe '#pay!' do
