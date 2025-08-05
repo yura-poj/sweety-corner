@@ -12,6 +12,13 @@ Rails.application.routes.draw do
 
   resources :categories, only: [ :index, :show, :create, :update, :destroy, :new, :edit ]
 
+  resources :orders, only: [ :index, :show ] do
+    member do
+      get :cart
+      delete :destroy_cart
+    end
+  end
+
   devise_for :users
   get "up" => "rails/health#show", as: :rails_health_check
 end
