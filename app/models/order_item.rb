@@ -5,10 +5,14 @@ class OrderItem < ApplicationRecord
   validates :quantity, :total_price, presence: true
 
   def add
-    increment!(quantity)
+    increment!(:quantity)
   end
 
   def remove
-    quantity.positive? ? decrement!(quantity) : destroy!
+    if quantity <= 1
+      destroy!
+    else
+      decrement!(:quantity)
+    end
   end
 end

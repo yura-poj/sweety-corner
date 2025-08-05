@@ -4,7 +4,7 @@ class Order < ApplicationRecord
   has_many :order_items, dependent: :destroy
 
   validates :total_price, :discount, presence: true
-  validate :must_be_one_cart
+  validate :must_be_one_cart, on: :create
 
 
   enum :status, [
@@ -29,7 +29,7 @@ class Order < ApplicationRecord
       transitions to: :cart
     end
 
-    event :proceed do
+    event :apply do
       transitions from: :cart, to: :waiting_for_payment
     end
 
@@ -57,17 +57,14 @@ class Order < ApplicationRecord
   private
 
   def process
-    order_items.each do |order_item|
-      order_item.proceed
-    end
-
     user.orders.create!(total_price: 0, status: :cart, discount: 0)
   end
 
   def must_be_one_cart
+    return if user.blank?
+
     if user.orders.where(status: :cart).exists?
       errors.add(:base, "User already have an active cart.")
-      throw(:abort)
     end
   end
 end
