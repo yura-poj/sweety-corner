@@ -3,7 +3,11 @@ Rails.application.routes.draw do
   # get "products", to: redirect("/products/page/1")
 
   resources :products, only: [ :index, :show, :create, :update, :destroy, :new, :edit ] do
-    # get "page/:page", action: :index, on: :collection
+    member do
+      post :add_to_cart
+      post :remove_from_cart
+      delete :destroy_from_cart
+    end
   end
 
   resources :categories, only: [ :index, :show, :create, :update, :destroy, :new, :edit ]
