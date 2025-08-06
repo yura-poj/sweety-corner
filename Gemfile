@@ -56,7 +56,7 @@ gem "slim-rails"
 
 gem "aasm"
 
-gem 'dry-monads'
+gem "dry-monads"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
