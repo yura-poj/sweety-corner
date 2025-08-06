@@ -41,15 +41,33 @@ class ProductsController < ApplicationController
   end
 
   def add_to_cart
-    Order::ProductAdder.new(current_user.cart).call(@product)
+    result = Order::ProductAdder.new(current_user.cart).call(@product)
+    if result.success?
+      flash[:notice] = "Product was added to cart!"
+    else
+      flash[:alert] = "Product was not added to cart!"
+    end
+    redirect_back(fallback_location: root_path)
   end
 
   def remove_from_cart
-    Order::ProductRemover.new(current_user.cart).call(@product)
+    result = Order::ProductRemover.new(current_user.cart).call(@product)
+    if result.success?
+      flash[:notice] = "Product was removed from cart!"
+    else
+      flash[:alert] = "Product was not removed from cart!"
+    end
+    redirect_back(fallback_location: root_path)
   end
 
   def destroy_from_cart
-    Order::ProductDestroyer.new(current_user.cart).call(@product)
+    result = Order::ProductDestroyer.new(current_user.cart).call(@product)
+    if result.success?
+      flash[:notice] = "Product was deleted from cart!"
+    else
+      flash[:alert] = "Product was not deleted from cart!"
+    end
+    redirect_back(fallback_location: root_path)
   end
 
   def product_params
