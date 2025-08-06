@@ -85,3 +85,5 @@ group :test do
   gem "rspec-rails"
   gem "shoulda-matchers"
 end
+
+gem "byebug", "~> 12.0", groups: [ :development, :test ]
