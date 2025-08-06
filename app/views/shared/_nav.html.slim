@@ -14,7 +14,7 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light.shadow-sm.mb-4
 
       ul.navbar-nav.ms-auto
         li.nav-item
-          = link_to "Cart", "#", class: "nav-link"
+          = link_to "Cart", "cart/", class: "nav-link"
           - if user_signed_in?
             li.nav-item
               = button_to "Logout", destroy_user_session_path, method: :delete, class: "nav-link"

@@ -1,0 +1,12 @@
+tr
+  td.ps-3
+    = link_to order_item.product.title, product_path(order_item.product), class: 'text-decoration-none'
+    - if order_item.product.respond_to?(:description) && order_item.product.description.present?
+      br
+      small.text-muted = truncate(order_item.product.description, length: 50)
+  td
+    span.badge.bg-light.text-dark = order_item.quantity
+  td
+    = number_to_currency(order_item.product.price) if order_item.product.respond_to?(:price)
+  td.text-end.pe-3
+    strong = number_to_currency(order_item.total_price)
