@@ -1,0 +1,36 @@
+tr
+  td.ps-3
+    strong ##{order.id}
+  td
+    - case order.status
+    - when 'cart'
+      span.badge.bg-secondary Cart
+    - when 'waiting_for_payment'
+      span.badge.bg-warning Waiting for Payment
+    - when 'payed'
+      span.badge.bg-info Paid
+    - when 'collecting'
+      span.badge.bg-primary Collecting
+    - when 'delivering'
+      span.badge.bg-primary Delivering
+    - when 'completed'
+      span.badge.bg-success Completed
+    - when 'received'
+      span.badge.bg-success Received
+    - when 'canceled'
+      span.badge.bg-danger Canceled
+    - else
+      span.badge.bg-secondary = order.status.humanize
+  td
+    strong = number_to_currency(order.total_price)
+  td
+    - if order.discount > 0
+      span.text-success = number_to_percentage(order.discount * 100, precision: 0)
+    - else
+      span.text-muted No discount
+  td
+    = order.created_at.strftime('%B %d, %Y')
+  td.text-end.pe-3
+    = link_to 'View', order_path(order), class: 'btn btn-outline-primary btn-sm me-1'
+    - if order.cart?
+      = button_to 'Clear Cart', destroy_cart_order_path(order), method: :delete, class: 'btn btn-outline-danger btn-sm', confirm: 'Are you sure?'

@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root "categories#index"
-  # get "products", to: redirect("/products/page/1")
+
+  get "cart" => "orders#cart"
+  delete "destroy_cart" => "orders#destroy_cart"
 
   resources :products, only: [ :index, :show, :create, :update, :destroy, :new, :edit ] do
     member do
@@ -12,12 +14,7 @@ Rails.application.routes.draw do
 
   resources :categories, only: [ :index, :show, :create, :update, :destroy, :new, :edit ]
 
-  resources :orders, only: [ :index, :show ] do
-    member do
-      get :cart
-      delete :destroy_cart
-    end
-  end
+  resources :orders, only: [ :index, :show ]
 
   devise_for :users
   get "up" => "rails/health#show", as: :rails_health_check
