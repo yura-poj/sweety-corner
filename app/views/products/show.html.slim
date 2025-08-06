@@ -1,28 +1,58 @@
 .container.mt-4
-  h1.mb-3.text-primary = @product.title
-
-  p.lead = @product.description if @product.respond_to?(:description)
-
-  hr
-
-  p
-    strong Price:
-    = number_to_currency(@product.price) if @product.respond_to?(:price)
-
-  p
-    strong Available quantity:
-    = @product.available_quantity if @product.respond_to?(:available_quantity)
-
-  p
-    strong Discount:
-    - if @product.respond_to?(:discount) && @product.discount.present?
-      = number_to_percentage(@product.discount * 100, precision: 0)
-
-  p
-    strong Category:
-    = link_to @product.category.title, category_path(@product.category) if @product.respond_to?(:category) && @product.category
-
-  = link_to "Edit Product", edit_product_path(@product), class: "btn btn-outline-secondary mt-3 me-2"
-  = button_to "Add to cart", add_to_cart_product_path(@product), method: :post, class: "btn btn-outline-secondary mt-3 me-2"
-  = button_to "remove from cart", remove_from_cart_product_path(@product), class: "btn btn-outline-secondary mt-3 me-2", method: :post
-  = link_to "Back to Products", products_path, class: "btn btn-primary mt-3"
+  .row
+    .col-md-6
+      - if @product.preview.attached?
+        .card.shadow-sm
+          = image_tag @product.preview, class: 'card-img-top img-fluid', style: 'max-height: 400px; object-fit: cover;'
+      - else
+        .card.shadow-sm
+          .card-body.text-center.py-5
+            i.fas.fa-image.fa-3x.text-muted.mb-3
+            p.text-muted No preview image available
+    
+    .col-md-6
+      h1.mb-3.text-primary = @product.title
+      
+      - if @product.respond_to?(:description) && @product.description.present?
+        p.lead = @product.description
+        hr
+      
+      .product-details
+        .row.mb-2
+          .col-sm-4
+            strong Price:
+          .col-sm-8
+            span.h5.text-success = number_to_currency(@product.price) if @product.respond_to?(:price)
+        
+        .row.mb-2
+          .col-sm-4
+            strong Available:
+          .col-sm-8
+            - if @product.respond_to?(:available_quantity)
+              - if @product.available_quantity > 0
+                span.badge.bg-success = "#{@product.available_quantity} in stock"
+              - else
+                span.badge.bg-danger Out of stock
+        
+        .row.mb-2
+          .col-sm-4
+            strong Discount:
+          .col-sm-8
+            - if @product.respond_to?(:discount) && @product.discount.present? && @product.discount > 0
+              span.badge.bg-warning.text-dark = number_to_percentage(@product.discount * 100, precision: 0)
+            - else
+              span.text-muted No discount
+        
+        .row.mb-3
+          .col-sm-4
+            strong Category:
+          .col-sm-8
+            - if @product.respond_to?(:category) && @product.category
+              = link_to @product.category.title, category_path(@product.category), class: 'badge bg-primary text-decoration-none'
+      
+      .action-buttons.mt-4
+        = button_to "Add to cart", add_to_cart_product_path(@product), method: :post, class: "btn btn-success btn-lg me-2 mb-2"
+        = button_to "Remove from cart", remove_from_cart_product_path(@product), class: "btn btn-outline-danger me-2 mb-2", method: :post
+        br
+        = link_to "Edit Product", edit_product_path(@product), class: "btn btn-outline-secondary me-2 mb-2"
+        = link_to "Back to Products", products_path, class: "btn btn-primary mb-2"
