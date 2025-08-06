@@ -21,7 +21,7 @@ Category.limit(10).each do |category|
       discount: Faker::Number.number(digits: 2),
       category: category
     )
-    
+
     # Attach preview image if it exists and product doesn't have one
     if File.exist?(candy_image_path) && !product.preview.attached?
       product.preview.attach(
