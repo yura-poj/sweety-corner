@@ -14,7 +14,7 @@ RSpec.describe Order::ProductRemover do
     context 'when quantity is > 1' do
       it 'call remove on order item' do
         order_item
-        
+
         allow(order.order_items).to receive(:find_by).with(product: product).and_return(order_item)
         expect(order_item).to receive(:remove)
 
