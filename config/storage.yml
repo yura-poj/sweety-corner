@@ -9,12 +9,12 @@ local:
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 amazon:
   service: S3
-  access_key_id: <%= ENV.fetch("YANDEX_ACCESS_KEY_ID") %>
-  secret_access_key: <%= ENV.fetch("YANDEX_SECRET_ACCESS_KEY") %>
+  access_key_id: <%= ENV.fetch("YANDEX_ACCESS_KEY_ID", "dummy_key") %>
+  secret_access_key: <%= ENV.fetch("YANDEX_SECRET_ACCESS_KEY", "dummy_secret") %>
   endpoint: 'https://storage.yandexcloud.net'
   region: 'ru-central1'
   force_path_style: true
-  bucket: <%= ENV.fetch("YANDEX_BUCKET") %>
+  bucket: <%= ENV.fetch("YANDEX_BUCKET", "dummy_bucket") %>
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:
