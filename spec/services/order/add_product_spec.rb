@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ProductAdder do
+RSpec.describe Order::ProductAdder do
   let(:user) { create(:user) }
   let(:product) { create(:product, price: 10.50) }
   let(:order) { create(:order, user: user) }

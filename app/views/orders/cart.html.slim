@@ -1,0 +1,67 @@
+.container.mt-4
+  h1.mb-4.text-center.text-primary Shopping Cart
+
+  - if @cart && @cart.order_items.any?
+    .row
+      .col-md-8
+        .card.shadow-sm
+          .card-header.bg-light
+            h4.mb-0 Cart Items
+          .card-body.p-0
+            table.table.table-striped.mb-0
+              thead.table-light
+                tr
+                  th.ps-3 Product
+                  th Quantity
+                  th Unit Price
+                  th.text-end.pe-3 Total
+              tbody
+                - @cart.order_items.each do |item|
+                  tr
+                    td.ps-3
+                      = link_to item.product.title, product_path(item.product), class: 'text-decoration-none fw-bold'
+                      - if item.product.respond_to?(:description) && item.product.description.present?
+                        br
+                        small.text-muted = truncate(item.product.description, length: 60)
+                    td
+                      .d-flex.align-items-center
+                        = button_to '-', remove_from_cart_product_path(item.product), method: :post, class: 'btn btn-outline-secondary btn-sm me-2'
+                        span.badge.bg-light.text-dark.fs-6 = item.quantity
+                        = button_to '+', add_to_cart_product_path(item.product), method: :post, class: 'btn btn-outline-secondary btn-sm ms-2'
+                    td
+                      = number_to_currency(item.product.price) if item.product.respond_to?(:price)
+                    td.text-end.pe-3
+                      strong = number_to_currency(item.total_price)
+
+      .col-md-4
+        .card.shadow-sm
+          .card-header.bg-primary.text-white
+            h5.mb-0 Order Summary
+          .card-body
+            .d-flex.justify-content-between.mb-3
+              span Items:
+              span = @cart.order_items.sum(:quantity)
+            
+            - if @cart.discount > 0
+              .d-flex.justify-content-between.mb-3
+                span Discount:
+                span.text-success = number_to_percentage(@cart.discount * 100, precision: 0)
+            
+            hr
+            .d-flex.justify-content-between.mb-3
+              strong Total:
+              strong.text-success.h5 = number_to_currency(@cart.total_price)
+            
+            = button_to 'Proceed to Checkout', '#', class: 'btn btn-success w-100 mb-2', disabled: true
+            = link_to 'Continue Shopping', products_path, class: 'btn btn-outline-primary w-100 mb-2'
+            = button_to 'Clear Cart', destroy_cart_path, method: :delete, class: 'btn btn-outline-danger w-100', confirm: 'Are you sure you want to clear your cart?'
+
+  - else
+    .row.justify-content-center
+      .col-md-6
+        .card.shadow-sm.text-center
+          .card-body.py-5
+            i.fas.fa-shopping-cart.fa-3x.text-muted.mb-3
+            h4.text-muted Your cart is empty
+            p.text-muted Start adding some products to your cart!
+            = link_to 'Browse Products', products_path, class: 'btn btn-primary btn-lg'
