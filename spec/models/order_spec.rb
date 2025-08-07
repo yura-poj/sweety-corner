@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Order, type: :model do
   let(:user) { create(:user) }
   let(:product) { create(:product, price: 10.50) }
+  let(:product2) { create(:product, price: 10.50) }
   let(:order) { create(:order, user: user) }
 
   describe 'associations' do
@@ -39,7 +40,7 @@ RSpec.describe Order, type: :model do
 
   describe '#pay!' do
     let!(:order_item1) { create(:order_item, order: order, product: product, quantity: 1, total_price: 10.50) }
-    let!(:order_item2) { create(:order_item, order: order, product: product, quantity: 2, total_price: 21.0) }
+    let!(:order_item2) { create(:order_item, order: order, product: product2, quantity: 2, total_price: 21.0) }
 
     it 'creates new empty cart for user after payment' do
       initial_orders_count = user.orders.count

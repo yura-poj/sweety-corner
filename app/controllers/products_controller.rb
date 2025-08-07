@@ -1,4 +1,6 @@
 class ProductsController < ApplicationController
+  before_action :set_product, only: [ :show, :edit, :update, :destroy, :add_to_cart,
+                                     :remove_from_cart, :add_to_cart, :destroy_from_cart ]
   def index
     @pagy, @products = pagy(Product.all)
   end
@@ -20,12 +22,9 @@ class ProductsController < ApplicationController
     end
   end
 
-  def edit
-    @product = Product.find(params[:id])
-  end
+  def edit; end
 
   def update
-    @product = Product.find(params[:id])
     if @product.update(product_params)
       redirect_to @product
     else
@@ -34,7 +33,6 @@ class ProductsController < ApplicationController
   end
 
   def destroy
-    @product = Product.find(params[:id])
     if @product.destroy
       redirect_back(fallback_location: root_path, notice: "Product was successfully destroyed.")
     else
@@ -43,11 +41,40 @@ class ProductsController < ApplicationController
   end
 
   def add_to_cart
-    @product = Product.find(params[:id])
-    current_user.cart.add_product(@product)
+    result = Order::ProductAdder.new(current_user.cart).call(@product)
+    if result.success?
+      flash[:notice] = "Product was added to cart!"
+    else
+      flash[:alert] = "Product was not added to cart!"
+    end
+    redirect_back(fallback_location: root_path)
+  end
+
+  def remove_from_cart
+    result = Order::ProductRemover.new(current_user.cart).call(@product)
+    if result.success?
+      flash[:notice] = "Product was removed from cart!"
+    else
+      flash[:alert] = "Product was not removed from cart!"
+    end
+    redirect_back(fallback_location: root_path)
+  end
+
+  def destroy_from_cart
+    result = Order::ProductDestroyer.new(current_user.cart).call(@product)
+    if result.success?
+      flash[:notice] = "Product was deleted from cart!"
+    else
+      flash[:alert] = "Product was not deleted from cart!"
+    end
+    redirect_back(fallback_location: root_path)
   end
 
   def product_params
-    params.require(:product).permit(:title, :category_id, :price, :discount, :available_quantity, :description)
+    params.require(:product).permit(:title, :category_id, :price, :discount, :available_quantity, :description, :preview)
+  end
+
+  def set_product
+    @product = Product.find(params[:id])
   end
 end

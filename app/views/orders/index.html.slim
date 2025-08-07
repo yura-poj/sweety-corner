@@ -1,0 +1,22 @@
+.container
+  h1.mb-4.text-center.text-primary My Orders
+
+  - if @orders.any?
+    .card.shadow-sm
+      .card-body.p-0
+        table.table.table-striped.mb-0
+          thead.table-light
+            tr
+              th.ps-3 Order #
+              th Status
+              th Total Price
+              th Discount
+              th Created
+              th.text-end.pe-3 Actions
+          tbody
+            = render @orders
+  - else
+    .alert.alert-info.text-center
+      h4 No orders found
+      p You haven't placed any orders yet.
+      = link_to 'Browse Products', products_path, class: 'btn btn-primary'

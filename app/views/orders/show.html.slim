@@ -1,0 +1,84 @@
+.container.mt-4
+  .row
+    .col-md-8
+      .card.shadow-sm
+        .card-header.bg-primary.text-white
+          h3.mb-0 Order ##{@order.id}
+        .card-body
+          .row.mb-3
+            .col-sm-3
+              strong Status:
+            .col-sm-9
+              - case @order.status
+              - when 'cart'
+                span.badge.bg-secondary.fs-6 Cart
+              - when 'waiting_for_payment'
+                span.badge.bg-warning.fs-6 Waiting for Payment
+              - when 'payed'
+                span.badge.bg-info.fs-6 Paid
+              - when 'collecting'
+                span.badge.bg-primary.fs-6 Collecting
+              - when 'delivering'
+                span.badge.bg-primary.fs-6 Delivering
+              - when 'completed'
+                span.badge.bg-success.fs-6 Completed
+              - when 'received'
+                span.badge.bg-success.fs-6 Received
+              - when 'canceled'
+                span.badge.bg-danger.fs-6 Canceled
+              - else
+                span.badge.bg-secondary.fs-6 = @order.status.humanize
+          
+          .row.mb-3
+            .col-sm-3
+              strong Created:
+            .col-sm-9
+              = @order.created_at.strftime('%B %d, %Y at %I:%M %p')
+          
+          .row.mb-3
+            .col-sm-3
+              strong Total Price:
+            .col-sm-9
+              span.h5.text-success = number_to_currency(@order.total_price)
+          
+          .row.mb-3
+            .col-sm-3
+              strong Discount:
+            .col-sm-9
+              - if @order.discount > 0
+                span.text-success = number_to_percentage(@order.discount * 100, precision: 0)
+              - else
+                span.text-muted No discount applied
+
+      - if @order.order_items.any?
+        .card.shadow-sm.mt-4
+          .card-header.bg-light
+            h4.mb-0 Order Items
+          .card-body.p-0
+            table.table.table-striped.mb-0
+              thead.table-light
+                tr
+                  th.ps-3 Product
+                  th Quantity
+                  th Unit Price
+                  th.text-end.pe-3 Total
+              tbody
+                = render @order.order_items
+            .card-footer.bg-light
+              .row
+                .col-md-6.offset-md-6
+                  .d-flex.justify-content-between
+                    strong Total: 
+                    strong.text-success = number_to_currency(@order.total_price)
+
+    .col-md-4
+      .card.shadow-sm
+        .card-header.bg-light
+          h5.mb-0 Actions
+        .card-body
+          - if @order.cart?
+            = link_to 'Continue Shopping', products_path, class: 'btn btn-primary w-100 mb-2'
+            = button_to 'Clear Cart', destroy_cart_path, method: :delete, class: 'btn btn-outline-danger w-100', confirm: 'Are you sure you want to clear your cart?'
+          - else
+            = link_to 'Back to Orders', orders_path, class: 'btn btn-primary w-100 mb-2'
+            = link_to 'Continue Shopping', products_path, class: 'btn btn-outline-primary w-100'
