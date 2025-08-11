@@ -25,6 +25,8 @@ jobs:
           port: ${{ secrets.SERVER_SSH_PORT }}
           source: "."
           target: "~/sweety_corner"
+          exclude:
+            - ".git"
           overwrite: true
 
       - name: Deploy via SSH (Docker Compose)
