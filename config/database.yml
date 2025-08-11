@@ -22,16 +22,16 @@ test:
 production:
   primary:
     <<: *default
-    database: sweet/production
+    database: sweety
   cache:
     <<: *default
-    database: sweet/production_cache
+    database: production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
-    database: sweet/production_queue
+    database: production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    database: sweet/production_cable
+    database: production_cable
     migrations_paths: db/cable_migrate
