@@ -18,7 +18,9 @@ jobs:
 
       - name: Create archive without .git
         run: |
-          tar --exclude='.git' -czf deploy.tar.gz .
+          mkdir ../deploy_copy
+          rsync -a --exclude='.git' ./ ../deploy_copy
+          tar -czf deploy.tar.gz -C ../deploy_copy .
 
       - name: Copy archive to server
         uses: appleboy/scp-action@v0.1.7
