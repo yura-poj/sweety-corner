@@ -24,4 +24,4 @@ Things you may want to cover:
 * ...
 # sweety-corner
 
-[![Build & Push Docker Image](https://img.shields.io/badge/Build%20Docker-blue?logo=github)](https://github.com/yura-poj/sweety-corner/actions/workflows/docker-build.yml)
+[![Build & Push Docker Image](https://img.shields.io/badge/Build%20Docker-blue?logo=github)](https://github.com/yura-poj/sweety-corner/actions/workflows/run.yml)
