@@ -23,14 +23,18 @@ RUN apt-get update -qq && \
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_WITHOUT="development" \
+    RAILS_SERVE_STATIC_FILES="1" \
+    RAILS_LOG_TO_STDOUT="1"
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
-# Install packages needed to build gems
+# Install packages needed to build gems and Node.js for SCSS compilation
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config && \
+    apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config curl && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install --no-install-recommends -y nodejs && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
@@ -46,7 +50,9 @@ COPY . .
 RUN bundle exec bootsnap precompile app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# First compile SCSS files, then precompile all assets
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails dartsass:build && \
+    SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 
 

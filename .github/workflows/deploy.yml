@@ -1,0 +1,110 @@
+name: Deploy on Merge to main
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create archive without .git
+        run: |
+          mkdir ../deploy_copy
+          rsync -a --exclude='.git' ./ ../deploy_copy
+          tar -czf deploy.tar.gz -C ../deploy_copy .
+
+      - name: Copy archive to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_SSH_PORT }}
+          source: "deploy.tar.gz"
+          target: "~/sweety_corner"
+          overwrite: true
+
+      - name: Deploy via SSH (Docker Compose)
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_SSH_PORT }}
+          script: |
+            set -e
+            cd ~/sweety_corner
+
+            # Распаковать архив
+            tar -xzf deploy.tar.gz
+            rm deploy.tar.gz
+
+            # Ensure docker compose is available (v2). On some hosts the command is 'docker-compose'.
+            if ! docker compose version >/dev/null 2>&1; then
+              echo "docker compose v2 not found. Please install Docker Compose v2." >&2
+              exit 1
+            fi
+
+            # Write .env for compose with secrets
+            cat > .docker.env << 'ENVEOF'
+            RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
+            SECRET_KEY_BASE=${{ secrets.SECRET_KEY_BASE }}
+            DB_USERNAME=${{ secrets.DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            RAILS_ENV=production
+            YANDEX_ACCESS_KEY_ID=${{ secrets.YANDEX_ACCESS_KEY_ID }}
+            YANDEX_SECRET_ACCESS_KEY=${{ secrets.YANDEX_SECRET_ACCESS_KEY }}
+            YANDEX_BUCKET=${{ secrets.YANDEX_BUCKET }}
+            ENVEOF
+
+
+            # Start only the database first
+            docker compose up -d db
+
+            echo "Waiting for PostgreSQL (compose service 'db') to be healthy..."
+            for i in {1..60}; do
+              STATUS=$(docker inspect --format='{{.State.Health.Status}}' sweety_db 2>/dev/null || echo "")
+              if [ "$STATUS" = "healthy" ]; then
+                echo "PostgreSQL is healthy"
+                break
+              fi
+              sleep 2
+            done
+
+            STATUS=$(docker inspect --format='{{.State.Health.Status}}' sweety_db 2>/dev/null || echo "")
+            if [ "$STATUS" != "healthy" ]; then
+              echo "PostgreSQL did not become healthy in time" >&2
+              docker logs sweety_db | tail -n 200 >&2 || true
+              exit 1
+            fi
+
+            # Build app image via compose
+            docker compose build app
+
+            # Prepare DB (create DB and run migrations)
+            docker compose run --rm app bin/rails db:prepare
+
+            # Start/Restart app service
+            docker compose up -d app
+
+            # Health check of the app on port 3000
+            echo "Waiting for app to respond on http://localhost:3000/ ..."
+            for i in {1..30}; do
+              if curl -fsS http://localhost:3000/ >/dev/null 2>&1; then
+                echo "App is up"
+                exit 0
+              fi
+              sleep 2
+            done
+            echo "App failed to respond, dumping last 200 log lines" >&2
+            docker logs --tail 200 sweety_corner || true
+            exit 1
