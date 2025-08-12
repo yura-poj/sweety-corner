@@ -81,35 +81,19 @@ jobs:
               exit 1
             fi
 
-            # Build app image
+            # Build app image via compose
             docker compose build app
-            docker build -t "$APP_IMAGE" .
 
-            # Run migrations (or initial setup if first time)
-            docker run --rm \
-              --network "$NET_NAME" \
-              -e RAILS_ENV=production \
-              -e RAILS_MASTER_KEY='${{ secrets.RAILS_MASTER_KEY }}' \
-              -e SECRET_KEY_BASE='${{ secrets.SECRET_KEY_BASE }}' \
-              -e DATABASE_URL="$DATABASE_URL" \
-              "$APP_IMAGE" bin/rails db:migrate
+            # Prepare DB (create DB and run migrations)
+            docker compose run --rm app bin/rails db:prepare
 
-            # Restart app container
-            docker stop sweety_corner >/dev/null 2>&1 || true
-            docker rm sweety_corner >/dev/null 2>&1 || true
-            docker run -d --name sweety_corner --restart unless-stopped \
-              --network "$NET_NAME" \
-              -p 80:80 \
-              -e RAILS_ENV=production \
-              -e RAILS_MASTER_KEY='${{ secrets.RAILS_MASTER_KEY }}' \
-              -e SECRET_KEY_BASE='${{ secrets.SECRET_KEY_BASE }}' \
-              -e DATABASE_URL="$DATABASE_URL" \
-              "$APP_IMAGE"
+            # Start/Restart app service
+            docker compose up -d app
 
-            # Health check
-            echo "Waiting for app to respond..."
+            # Health check of the app on port 3000
+            echo "Waiting for app to respond on http://localhost:3000/ ..."
             for i in {1..30}; do
-              if curl -fsS http://localhost/ >/dev/null 2>&1; then
+              if curl -fsS http://localhost:3000/ >/dev/null 2>&1; then
                 echo "App is up"
                 exit 0
               fi
