@@ -1,27 +1,40 @@
-# README
+# 🍰 Sweety Corner
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+> A modern Ruby on Rails 8.0 application for managing a sweet corner business
 
-Things you may want to cover:
+## 🚀 Live Demo
 
-* Ruby version
+**[Visit Sweety Corner →](http://147.45.210.217:3000/)**
 
-* System dependencies
+## ✨ Features
 
-* Configuration
+- 🏪 **Product Management** - Categories and products with images
+- 🛒 **Shopping Cart** - Add products to cart and manage orders  
+- 👤 **User Authentication** - Secure login with Devise
+- 🎨 **Modern UI** - Bootstrap 5 with responsive design
+- 📱 **Mobile Friendly** - Works great on all devices
 
-* Database creation
+## 🛠 Tech Stack
 
-* Database initialization
+- **Ruby** 3.4.0 + **Rails** 8.0
+- **PostgreSQL** (production) / **SQLite** (development)
+- **Bootstrap 5** + **SCSS** with Dart Sass
+- **Docker** + **Kamal** deployment
 
-* How to run the test suite
+## 🏃‍♂️ Quick Start
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+# Clone and setup
+git clone https://github.com/yura-poj/sweety-corner.git
+cd sweety_corner
+bundle install
 
-* Deployment instructions
+# Start development server
+bin/dev
+```
 
-* ...
-# sweety-corner
+---
 
-[![Build & Push Docker Image](https://img.shields.io/badge/Build%20Docker-blue?logo=github)](https://github.com/yura-poj/sweety-corner/actions/workflows/run.yml)
+<div align="center">
+  <strong>Made with ❤️ using Ruby on Rails</strong>
+</div>

@@ -7,23 +7,23 @@ class Order::ProductAdder
 
   def call(product)
     @product = product
-    add_or_create_product
+    add_quantity_or_create_order_item
   end
 
   private
 
-  def add_or_create_product
-    @position = @order.order_items.find_by(product_id: @product)
+  def add_quantity_or_create_order_item
+    @order_item = @order.order_items.find_by(product_id: @product)
 
-    @position ? add_product : create_product
+    @order_item ? increment_quantity : create_order_item
   end
 
-  def add_product
-    @position.add
+  def increment_quantity
+    @order_item.add
     Success(:ok)
   end
 
-  def create_product
+  def create_order_item
     order = @order.order_items.create(
       product: @product,
       quantity: 1,
