@@ -1,7 +1,7 @@
 class CategoriesController < ApplicationController
   include ActionPolicy::Behaviour
 
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [ :new, :create, :edit, :update, :destroy ]
   before_action :authorize!
   def index
     @categories = Category.all

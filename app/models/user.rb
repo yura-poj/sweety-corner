@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   has_many :orders, dependent: :destroy
 
-  enum :role, [:user, :admin]
+  enum :role, [ :user, :admin ]
 
   def cart
     @cart ||= orders.find_by(status: :cart) || create_cart

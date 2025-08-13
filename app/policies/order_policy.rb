@@ -23,4 +23,3 @@ class OrderPolicy < ApplicationPolicy
   #   relation.where(user: user)
   # end
 end
-
