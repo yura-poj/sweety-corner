@@ -1,9 +1,14 @@
 class CategoriesController < ApplicationController
+  include ActionPolicy::Behaviour
+
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :authorize!
   def index
     @categories = Category.all
   end
 
   def show
+    authorize!
     @category = Category.find(params[:id])
     @pagy, @products = pagy(@category.products.all)
   end
@@ -38,6 +43,8 @@ class CategoriesController < ApplicationController
     Category.find(params[:id]).destroy!
     redirect_to categories_path, notice: "Category deleted!"
   end
+
+  private
 
   def category_params
     params.require(:category).permit(:title)
