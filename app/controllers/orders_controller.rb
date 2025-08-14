@@ -1,10 +1,15 @@
 class OrdersController < ApplicationController
+  include ActionPolicy::Behaviour
+
+  before_action :authenticate_user!
+  before_action :authorize!
+
   def index
-    @orders = current_user.orders
+    @orders = authorized_scope(Order.all)
   end
 
   def show
-    @order = Order.find(params[:id])
+    @order = current_user.orders.find(params[:id])
   end
 
   def cart
