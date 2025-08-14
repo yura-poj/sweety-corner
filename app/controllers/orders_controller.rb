@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   include ActionPolicy::Behaviour
 
   before_action :authenticate_user!
-  before_action :authorize!, except: :index
+  before_action :authorize!
 
   def index
     @orders = authorized_scope(Order.all)

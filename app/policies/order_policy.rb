@@ -1,8 +1,6 @@
 class OrderPolicy < ApplicationPolicy
   def index?
-    deny! unless auth?
-
-    relation_scope(record)
+    auth?
   end
 
   def show?
