@@ -1,6 +1,8 @@
 class OrderPolicy < ApplicationPolicy
   def index?
-    auth?
+    deny! unless auth?
+
+    relation_scope(record)
   end
 
   def show?
@@ -18,8 +20,8 @@ class OrderPolicy < ApplicationPolicy
   # Scoping
   # See https://actionpolicy.evilmartians.io/#/scoping
   #
-  # relation_scope do |relation|
-  #   next relation if admin?
-  #   relation.where(user: user)
-  # end
+  relation_scope do |relation|
+    next relation if admin?
+    relation.where(user: user)
+  end
 end

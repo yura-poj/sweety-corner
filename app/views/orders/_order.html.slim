@@ -33,4 +33,4 @@ tr
   td.text-end.pe-3
     = link_to 'View', order_path(order), class: 'btn btn-outline-primary btn-sm me-1'
     - if order.cart?
-      = button_to 'Clear Cart', destroy_cart_order_path(order), method: :delete, class: 'btn btn-outline-danger btn-sm', confirm: 'Are you sure?'
+      = button_to 'Clear Cart', destroy_cart_path(order), method: :delete, class: 'btn btn-outline-danger btn-sm', confirm: 'Are you sure?'
