@@ -7,6 +7,7 @@ class ProductsController < ApplicationController
 
   before_action :authorize!
 
+
   def index
     @pagy, @products = pagy(Product.all)
   end
