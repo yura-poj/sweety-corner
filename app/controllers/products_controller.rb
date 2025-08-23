@@ -1,6 +1,13 @@
 class ProductsController < ApplicationController
+  include ActionPolicy::Behaviour
   before_action :set_product, only: [ :show, :edit, :update, :destroy, :add_to_cart,
-                                     :remove_from_cart, :destroy_from_cart ]
+                                     :remove_from_cart, :add_to_cart, :destroy_from_cart ]
+
+  before_action :authenticate_user!, only: [ :new, :create, :edit, :update, :destroy ]
+
+  before_action :authorize!
+
+
   def index
     @pagy, @products = pagy(Product.all)
   end
