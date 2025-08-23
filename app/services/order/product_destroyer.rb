@@ -9,16 +9,16 @@ class Order::ProductDestroyer
 
   def call(product)
     @product = product
-    destroy_product
+    destroy_order_item
   end
 
   private
 
-  def destroy_product
-    @position = @order.order_items.find_by(product: @product)
-    Failure(:not_found) unless @position
+  def destroy_order_item
+    @order_item = @order.order_items.find_by(product: @product)
+    return Failure(:not_found) unless @order_item
 
-    if @position.destroy
+    if @order_item.destroy
       Success(:ok)
     else
       Failure(:destroy_error)

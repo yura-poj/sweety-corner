@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :edit, :update, :destroy, :add_to_cart,
-                                     :remove_from_cart, :add_to_cart, :destroy_from_cart ]
+                                     :remove_from_cart, :destroy_from_cart ]
   def index
     @pagy, @products = pagy(Product.all)
   end
